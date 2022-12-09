@@ -4,11 +4,14 @@ class Common{
 	public Common() {
 	}
 	
-	private String Name;
-	
 	public synchronized void showName()
 	{
-		System.out.println(Name); 
+		
+		System.out.println(Thread.currentThread().getName());
+		try {
+			Thread.sleep(1000);
+		} catch (Exception e) {
+		}
 		notify();
 		try {
 			wait();
@@ -16,9 +19,7 @@ class Common{
 		}
 	}
 	
-	public void SetName(String Name) {
-		this.Name=Name;
-	}
+	
 }
 
 class ThreadEx_13_1 implements Runnable{
@@ -29,7 +30,6 @@ class ThreadEx_13_1 implements Runnable{
 	public void run() {
 		for(int i=0;i<10;i++)
 		{
-			c.SetName(Thread.currentThread().getName());
 			c.showName();
 		}
 	}
@@ -44,9 +44,19 @@ public class ThreadEx_13 {
 		Thread t1 = new Thread(r);
 		Thread t2 = new Thread(r);
 		
+		t1.setDaemon(true);
+		t2.setDaemon(true);
+		
 		t1.start();
 		t2.start();
 		
+		for(int i=0;i<10;i++)
+		{
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+			}
+		}
 		
 	}
 }
