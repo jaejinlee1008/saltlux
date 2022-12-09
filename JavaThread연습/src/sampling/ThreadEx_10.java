@@ -30,7 +30,6 @@ public class ThreadEx_10 {
 			
 		t1.start();
 		t2.start();
-		
 		startTime=System.currentTimeMillis(); //현재시간을 숫자로 표현
 		
 		try {
