@@ -106,7 +106,6 @@ public class Company {
 		{
 			if(map.get(i) instanceof Secretary)
 			{
-				
 				System.out.println(((Secretary)map.get(i)).name + "          " + ((Secretary)map.get(i)).department + "        " + ((Secretary)map.get(i)).salary);
 			}else if(map.get(i) instanceof Sales)
 			{
