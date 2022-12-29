@@ -15,7 +15,7 @@ public class BookService {
 		return list;
 	}
 
-	public ObservableList<BookVO> getDeletedByKeyword(String deleteISBN, String input) {
+	public ObservableList<BookVO> getDeletedByISBN(String deleteISBN, String input) {
 		BookDAO dao = new BookDAO();
 		int count = dao.delete(deleteISBN);
 		ObservableList<BookVO> list = dao.select(input);

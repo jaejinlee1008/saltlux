@@ -8,7 +8,7 @@ public class BookDeleteController {
 
 	public ObservableList<BookVO> getDeletedResult(String deleteISBN, String input) {
 		BookService service = new BookService();
-		ObservableList<BookVO> list = service.getDeletedByKeyword(deleteISBN,input);
+		ObservableList<BookVO> list = service.getDeletedByISBN(deleteISBN,input);
 		return list;
 	}
 
