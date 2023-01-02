@@ -155,7 +155,7 @@ public class BookSearchView extends Application{
 		Scene scene = new Scene(root);
 		
 		PrimaryStage.setScene(scene);
-		PrimaryStage.setTitle("BookSearch JavaFX Connection Pool");
+		PrimaryStage.setTitle("BookSearch JavaFX MVC");
 		PrimaryStage.setOnCloseRequest(e->{
 			
 		});
