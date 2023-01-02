@@ -146,10 +146,11 @@ public class BookSearchView extends Application{
 				if(e1.getClickCount()>1)
 				{
 					
-					ButtonType type = new ButtonType("OK",ButtonData.OK_DONE);
+				
 					BookSearchOtherDataController controller = new BookSearchOtherDataController();
 					// VO 새로 만들지 않고 기존의 VO에 추가, 생성자를 새로 만들어준다
 					ObservableList<BookExtraVO> list = controller.getResult(deleteISBN);
+					ButtonType type = new ButtonType("OK",ButtonData.OK_DONE);
 					dialog = new Dialog<>();
 					dialog.setTitle("책의 부가정보");
 					dialog.setContentText("출판일 : " + list.get(0).getBdate() + ", 페이지 수 : " + list.get(0).getBpage() + ", 보충자료 : " + list.get(0).getBsupplement() + ", 역자 : " + list.get(0).getBtranslator() + ", 출판사 : " + list.get(0).getBpublisher());
