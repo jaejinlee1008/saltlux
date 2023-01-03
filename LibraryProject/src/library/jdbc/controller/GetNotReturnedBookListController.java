@@ -4,13 +4,12 @@ import javafx.collections.ObservableList;
 import library.jdbc.VO.RentVO;
 import library.jdbc.service.LibraryService;
 
-public class UserRentInfoSearchController {
+public class GetNotReturnedBookListController {
 
-	
-	public ObservableList<RentVO> getResult(String ID) {
+	public ObservableList<RentVO> getResult() {
 		LibraryService service = new LibraryService();
-		ObservableList<RentVO> rent = service.rentinfo(ID);
-		return rent;
+		ObservableList<RentVO> list = service.getNotReturnedList();
+		return list;
 	}
 
 }

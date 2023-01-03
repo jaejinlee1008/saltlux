@@ -2,6 +2,7 @@ package library.jdbc.view;
 
 import java.sql.Date;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -22,11 +23,13 @@ public class NotReturnedBookView {
 	private Scene scene = null;
 	private Stage primaryStage = null;
 	private Button goBack;
-	public NotReturnedBookView(BorderPane admin, Scene scene, Stage primaryStage) {
+	private ObservableList<RentVO> list=null;
+	public NotReturnedBookView(BorderPane admin, Scene scene, Stage primaryStage, ObservableList<RentVO> list) {
 		super();
 		this.admin = admin;
 		this.scene = scene;
 		this.primaryStage = primaryStage;
+		this.list = list;
 	}
 	
 	public BorderPane getRoot()
@@ -53,26 +56,31 @@ public class NotReturnedBookView {
 		
 		
 		TableColumn<RentVO,String> isbnColumn = new TableColumn<>("ISBN"); 
-		isbnColumn.setMinWidth(150);
+		isbnColumn.setMinWidth(130);
 		isbnColumn.setCellValueFactory(new PropertyValueFactory<>("bisbn"));
 		
+		TableColumn<RentVO,String> titleColumn = new TableColumn<>("책 제목"); 
+		titleColumn.setMinWidth(130);
+		titleColumn.setCellValueFactory(new PropertyValueFactory<>("btitle"));
+		
 		TableColumn<RentVO,String> idColumn = new TableColumn<>("대여자ID"); 
-		idColumn.setMinWidth(150);
+		idColumn.setMinWidth(80);
 		idColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
 		
 		TableColumn<RentVO,Date> dateColumn = new TableColumn<>("대여날짜"); 
-		dateColumn.setMinWidth(150);
+		dateColumn.setMinWidth(100);
 		dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
 		
-		TableColumn<RentVO,Character> isreturnColumn = new TableColumn<>("반납여부"); 
-		isreturnColumn.setMinWidth(150);
-		isreturnColumn.setCellValueFactory(new PropertyValueFactory<>("isreturn_yn"));
+		TableColumn<RentVO,String> isreturnColumn = new TableColumn<>("반납여부"); 
+		isreturnColumn.setMinWidth(80);
+		isreturnColumn.setCellValueFactory(new PropertyValueFactory<>("isreturn_YN"));
 		
 		
 		tableView = new TableView<RentVO>();
 		
-		tableView.getColumns().addAll(isbnColumn,idColumn,dateColumn,isreturnColumn);
+		tableView.getColumns().addAll(isbnColumn,titleColumn,idColumn,dateColumn,isreturnColumn);
 		
+		tableView.setItems(list);
 		
 		root.setCenter(tableView);
 		root.setBottom(flowpane);

@@ -1,5 +1,6 @@
 package library.jdbc.view;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -8,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
+import library.jdbc.VO.RentVO;
+import library.jdbc.controller.GetNotReturnedBookListController;
 
 public class AdministratorView {
 	private BorderPane logIn=null;
@@ -51,7 +54,10 @@ public class AdministratorView {
 		searchNotReturnedBook = new Button("미납도서 검색");
 		searchNotReturnedBook.setPrefSize(150, 70);
 		searchNotReturnedBook.setOnAction(e -> {
-			NotReturnedBookView notreturnedbookview = new NotReturnedBookView(root, scene, primaryStage);
+			
+			GetNotReturnedBookListController con = new GetNotReturnedBookListController();
+			ObservableList<RentVO> list = con.getResult();
+			NotReturnedBookView notreturnedbookview = new NotReturnedBookView(root, scene, primaryStage,list);
 			scene.setRoot(notreturnedbookview.getRoot());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("미납 도서 검색");

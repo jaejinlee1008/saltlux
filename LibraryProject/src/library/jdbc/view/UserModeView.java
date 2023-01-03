@@ -1,5 +1,6 @@
 package library.jdbc.view;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -11,10 +12,12 @@ import javafx.scene.control.Dialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
+import library.jdbc.VO.LogVO;
 import library.jdbc.VO.RentVO;
 import library.jdbc.VO.UserVO;
 import library.jdbc.controller.UserInfoSearchController;
 import library.jdbc.controller.UserRentInfoSearchController;
+import library.jdbc.controller.UserRentLogSearchController;
 
 
 public class UserModeView {
@@ -43,8 +46,8 @@ public class UserModeView {
 		rentInfoSearch.setPrefSize(150, 70);
 		rentInfoSearch.setOnAction(e -> {
 			UserRentInfoSearchController controller = new UserRentInfoSearchController();
-			RentVO rent =  controller.getResult(ID);
-			if(rent==null)
+			ObservableList<RentVO> list =  controller.getResult(ID);
+			if(list==null)
 			{
 				ButtonType type = new ButtonType("OK",ButtonData.OK_DONE);
 				dialog = new Dialog<>();
@@ -54,7 +57,9 @@ public class UserModeView {
 				dialog.getDialogPane().getButtonTypes().add(type);
 				dialog.show();
 			}
-			UserRentInfoView userrentinfoview = new UserRentInfoView(root, scene, primaryStage, rent);
+			UserRentLogSearchController logcon = new UserRentLogSearchController();
+			ObservableList<LogVO> loglist = logcon.getResult(ID);
+			UserRentInfoView userrentinfoview = new UserRentInfoView(root, scene, primaryStage, loglist);
 			scene.setRoot(userrentinfoview.getRoot());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("대여 내역 조회");
@@ -65,7 +70,7 @@ public class UserModeView {
 		userInfoSearchAndUpdate.setOnAction(e -> {
 			UserInfoSearchController controller = new UserInfoSearchController();
 			UserVO user = controller.getResult(ID);
-			UserInfoSearchAndUpdateView userinfosearchandupdateview = new UserInfoSearchAndUpdateView(root, scene, primaryStage, user.getName(), user.getID(), user.getEmail(), user.getIsRent_YN(), user.getPoint());
+			UserInfoSearchAndUpdateView userinfosearchandupdateview = new UserInfoSearchAndUpdateView(root, scene, primaryStage, user.getName(), user.getID(), user.getEmail(), user.getPoint());
 			scene.setRoot(userinfosearchandupdateview.getRoot());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("개인정보 수정 및 조회");
@@ -74,7 +79,9 @@ public class UserModeView {
 		searchBook = new Button("도서 검색");
 		searchBook.setPrefSize(150, 70);
 		searchBook.setOnAction(e -> {
-			UserModeBookSearchView usermodebooksearchview = new UserModeBookSearchView(root, scene, primaryStage);
+			UserInfoSearchController controller = new UserInfoSearchController();
+			UserVO user = controller.getResult(ID);
+			UserModeBookSearchView usermodebooksearchview = new UserModeBookSearchView(root, scene, primaryStage,ID,user.getName());
 			scene.setRoot(usermodebooksearchview.getRoot());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("도서 검색");

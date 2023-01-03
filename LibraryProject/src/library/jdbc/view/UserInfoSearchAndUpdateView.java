@@ -23,7 +23,6 @@ public class UserInfoSearchAndUpdateView {
 	private String oldName;
 	private String oldID;
 	private String oldEmail;
-	private char oldIsrent;
 	private int oldPoint;
 	
 	private Text name;
@@ -39,7 +38,7 @@ public class UserInfoSearchAndUpdateView {
 	
 
 	public UserInfoSearchAndUpdateView(BorderPane user, Scene scene, Stage primaryStage, String oldName, String oldID,
-			String oldEmail, char oldIsrent, int oldPoint) {
+			String oldEmail, int oldPoint) {
 		super();
 		this.user = user;
 		this.scene = scene;
@@ -47,7 +46,6 @@ public class UserInfoSearchAndUpdateView {
 		this.oldName = oldName;
 		this.oldID = oldID;
 		this.oldEmail = oldEmail;
-		this.oldIsrent = oldIsrent;
 		this.oldPoint = oldPoint;
 	}
 
@@ -81,11 +79,6 @@ public class UserInfoSearchAndUpdateView {
 		
 		isrent = new Text("대여여부");
 		isrent.setWrappingWidth(50);
-		
-		isrenttf = new TextField();
-		isrenttf.setPrefSize(200, 40);
-		isrenttf.setDisable(true);
-		isrenttf.setText(Character.toString(oldIsrent));
 		
 		
 		
@@ -141,14 +134,6 @@ public class UserInfoSearchAndUpdateView {
 		emailflowpane.getChildren().add(email);
 		emailflowpane.getChildren().add(emailtf);
 		
-		FlowPane isrentflowpane = new FlowPane();
-		isrentflowpane.setPadding(new Insets(10,10,10,10));
-		isrentflowpane.setAlignment(Pos.CENTER);
-		isrentflowpane.setColumnHalignment(HPos.CENTER);
-		isrentflowpane.setPrefSize(700, 40);
-		isrentflowpane.setHgap(10);
-		isrentflowpane.getChildren().add(isrent);
-		isrentflowpane.getChildren().add(isrenttf);
 		
 		FlowPane pointflowpane = new FlowPane();
 		pointflowpane.setPadding(new Insets(10,10,10,10));
@@ -177,7 +162,6 @@ public class UserInfoSearchAndUpdateView {
 		centerflowpane.getChildren().add(nameflowpane);
 		centerflowpane.getChildren().add(idflowpane);
 		centerflowpane.getChildren().add(emailflowpane);
-		centerflowpane.getChildren().add(isrentflowpane);
 		centerflowpane.getChildren().add(pointflowpane);
 		centerflowpane.getChildren().add(updateflowpane);
 		

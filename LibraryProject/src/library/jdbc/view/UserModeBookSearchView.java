@@ -1,5 +1,6 @@
 package library.jdbc.view;
 
+
 import java.util.Optional;
 
 import javafx.collections.ObservableList;
@@ -19,7 +20,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import library.jdbc.VO.BookVO;
+import library.jdbc.controller.BookRentController;
 import library.jdbc.controller.BookSearchController;
+import library.jdbc.controller.CanRentCheckController;
 
 
 public class UserModeBookSearchView {
@@ -30,12 +33,15 @@ public class UserModeBookSearchView {
 	private TextField keywordtf;
 	private String keywordstr="";
 	private Button goBack;
-	
-	public UserModeBookSearchView(BorderPane user, Scene scene, Stage primaryStage) {
+	private String ID;
+	private String name;
+	public UserModeBookSearchView(BorderPane user, Scene scene, Stage primaryStage, String ID, String name) {
 		super();
 		this.user = user;
 		this.scene = scene;
 		this.primaryStage = primaryStage;
+		this.ID = ID;
+		this.name = name;
 	}
 	
 	
@@ -90,7 +96,7 @@ public class UserModeBookSearchView {
 		TableColumn<BookVO,Integer> priceColumn = new TableColumn<>("PRICE"); 
 		priceColumn.setMinWidth(150);
 		priceColumn.setCellValueFactory(new PropertyValueFactory<>("bprice"));
-		
+
 		
 		
 		
@@ -105,40 +111,64 @@ public class UserModeBookSearchView {
 			//TableRow를 만들어서
 			TableRow<BookVO> row = new TableRow<>();
 			//해당 행에 이벤트 처리를 설정한 다음
+			
 			row.setOnMouseClicked(e1->{
 				// 클릭한 행을 얻어온다.
 				BookVO book = row.getItem();
 				// 삭제할 책의 Primary Key를 알아내야 한다.
 				
 				  if(e1.getClickCount()>1) { 
-				  
-					    ButtonType type = new ButtonType("OK",ButtonData.OK_DONE);
-						Dialog<ButtonType> dialog = new Dialog<>();
-						dialog.setTitle("대여 알림");
-						dialog.setContentText("대여 하시겠습니까?");
-						dialog.getDialogPane().setMinSize(700, 200);
-						dialog.getDialogPane().getButtonTypes().add(type);
-						Optional<ButtonType> result = dialog.showAndWait();
-					    if(result.get().getText().equals("OK"))
-					    {
-					    	// 대여하고 정보 수정
-					    	ButtonType type1 = new ButtonType("OK",ButtonData.OK_DONE);
-							Dialog<ButtonType> dialog1 = new Dialog<>();
-							dialog1.setTitle("알림");
-							dialog1.setContentText("대여 성공");
-							dialog1.getDialogPane().setMinSize(700, 200);
-							dialog1.getDialogPane().getButtonTypes().add(type);
-							dialog1.show();
-					    }else
-					    {
-					    	ButtonType type1 = new ButtonType("OK",ButtonData.OK_DONE);
-							Dialog<ButtonType> dialog1 = new Dialog<>();
-							dialog1.setTitle("알림");
-							dialog1.setContentText("대여 실패");
-							dialog1.getDialogPane().setMinSize(700, 200);
-							dialog1.getDialogPane().getButtonTypes().add(type);
-							dialog1.show();
-					    }
+					  	CanRentCheckController controller = new CanRentCheckController();
+					  	
+					  	if(controller.getResult(book.getBisbn()))
+					  	{
+					  		ButtonType type = new ButtonType("OK",ButtonData.OK_DONE);
+							Dialog<ButtonType> dialog = new Dialog<>();
+							dialog.setTitle("대여 알림");
+							dialog.setContentText("대여가 가능합니다. 대여 하시겠습니까?");
+							dialog.getDialogPane().setMinSize(700, 200);
+							dialog.getDialogPane().getButtonTypes().add(type);
+							try {
+								Optional<ButtonType> result = dialog.showAndWait();
+								
+							    if(result.get().getText().equals("OK"))
+							    {
+							    	
+							    	BookRentController rentcontroller = new BookRentController();
+							    	rentcontroller.setResult(book.getBisbn(),book.getBtitle(),ID,"N");
+							    	rentcontroller.setResult(book.getBtitle(), book.getBisbn(), ID, name, "대여", 0);
+							    	ButtonType type1 = new ButtonType("OK",ButtonData.OK_DONE);
+									Dialog<ButtonType> dialog1 = new Dialog<>();
+									dialog1.setTitle("알림");
+									dialog1.setContentText("대여 성공");
+									dialog1.getDialogPane().setMinSize(700, 200);
+									dialog1.getDialogPane().getButtonTypes().add(type1);
+									dialog1.show();
+							    }else
+							    {
+							    	ButtonType type2 = new ButtonType("OK",ButtonData.OK_DONE);
+									Dialog<ButtonType> dialog1 = new Dialog<>();
+									dialog1.setTitle("알림");
+									dialog1.setContentText("대여 실패");
+									dialog1.getDialogPane().setMinSize(700, 200);
+									dialog1.getDialogPane().getButtonTypes().add(type2);
+									dialog1.show();
+							    }
+							} catch (Exception e2) {
+								// TODO: handle exception
+							}
+							
+					  	}else
+					  	{
+					  		ButtonType type = new ButtonType("OK",ButtonData.OK_DONE);
+							Dialog<ButtonType> dialog = new Dialog<>();
+							dialog.setTitle("대여 알림");
+							dialog.setContentText("대여가 불가능합니다.");
+							dialog.getDialogPane().setMinSize(700, 200);
+							dialog.getDialogPane().getButtonTypes().add(type);
+							dialog.show();
+					  	}
+					    
 				  }
 				 
 			});
@@ -151,6 +181,7 @@ public class UserModeBookSearchView {
 		
 		root.setCenter(tableView);
 		root.setBottom(flowpane);
+		
 		
 		return root;
 	}

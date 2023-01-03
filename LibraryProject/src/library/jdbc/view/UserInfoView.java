@@ -61,10 +61,6 @@ public class UserInfoView {
 		emailColumn.setMinWidth(250);
 		emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
 		
-		TableColumn<UserVO,Character> isrentColumn = new TableColumn<>("대여여부"); 
-		isrentColumn.setMinWidth(80);
-		isrentColumn.setCellValueFactory(new PropertyValueFactory<>("IsRent_YN"));
-		
 		TableColumn<UserVO,Integer> pointColumn = new TableColumn<>("POINT"); 
 		pointColumn.setMinWidth(110);
 		pointColumn.setCellValueFactory(new PropertyValueFactory<>("point"));
@@ -73,10 +69,8 @@ public class UserInfoView {
 		
 		
 		tableView = new TableView<UserVO>();
-		//extratableView = new TableView<BookExtraVO>();
-		// 위에서 만들어진 컬럼객체를 TableView에 붙인다.
-		tableView.getColumns().addAll(nameColumn,idColumn,emailColumn,isrentColumn,pointColumn);
-		//extratableView.getColumns().addAll(dateColumn,pageColumn,translatorColumn,supplementColumn,publisherColumn);
+	
+		tableView.getColumns().addAll(nameColumn,idColumn,emailColumn,pointColumn);
 		
 		
 		root.setCenter(tableView);

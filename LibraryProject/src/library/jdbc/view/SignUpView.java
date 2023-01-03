@@ -1,15 +1,22 @@
 package library.jdbc.view;
 
+import java.util.Optional;
+
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import library.jdbc.controller.CheckCanSignUPController;
+import library.jdbc.controller.SignUPController;
 
 public class SignUpView{
 	
@@ -118,9 +125,43 @@ public class SignUpView{
 		signup = new Button("가입");
 		signup.setPrefSize(150, 70);
 		signup.setOnAction(e -> {
-			//db에 데이터 넣고 창 로그인 창으로 돌아가기
-			scene.setRoot(logIn);
-			primaryStage.setScene(scene);
+
+			CheckCanSignUPController controller = new CheckCanSignUPController();
+			if(controller.getResult(nametf.getText(),idtf.getText(),pwtf.getText(),pwchecktf.getText(),emailtf.getText()))
+			{
+				SignUPController signupcon = new SignUPController();
+				signupcon.setResult(nametf.getText(),idtf.getText(),pwtf.getText(),emailtf.getText());
+				
+				ButtonType type = new ButtonType("OK",ButtonData.OK_DONE);
+				Dialog<ButtonType> dialog = new Dialog<>();
+				dialog.setTitle("알림");
+				dialog.setContentText("성공적으로 가입하였습니다!!!!");
+				dialog.getDialogPane().setMinSize(700, 200);
+				dialog.getDialogPane().getButtonTypes().add(type);
+				try {
+					Optional<ButtonType> result = dialog.showAndWait();
+					
+				    if(result.get().getText().equals("OK"))
+				    {
+				    	scene.setRoot(logIn);
+						primaryStage.setScene(scene);
+				    }
+				} catch (Exception e2) {
+					// TODO: handle exception
+				}
+				
+				
+			}else
+			{
+		    	ButtonType type = new ButtonType("OK",ButtonData.OK_DONE);
+				Dialog<ButtonType> dialog = new Dialog<>();
+				dialog.setTitle("알림");
+				dialog.setContentText("가입 실패 입력 정보를 다시 확인해주세요");
+				dialog.getDialogPane().setMinSize(700, 200);
+				dialog.getDialogPane().getButtonTypes().add(type);
+				dialog.show();
+			}
+			
 		});
 		
 		

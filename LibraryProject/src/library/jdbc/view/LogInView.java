@@ -50,7 +50,15 @@ public class LogInView extends Application{
 		pwtf = new TextField();
 		pwtf.setPrefSize(200, 40);
 		pwtf.setOnAction(e->{
-			if(loginCheck(idtf.getText(), pwtf.getText()))
+			
+			
+			if(idtf.getText().equals("administrator") && pwtf.getText().equals("administer1234"))
+			{
+				AdministratorView administratorview = new AdministratorView(primaryStage,scene,root);
+				scene.setRoot(administratorview.getRoot());
+				primaryStage.setScene(scene);
+				primaryStage.setTitle("관리자 모드");
+			} else if(loginCheck(idtf.getText(), pwtf.getText()))
 			{
 				UserModeView usermodeview = new UserModeView(primaryStage, scene, root,idtf.getText());
 				scene.setRoot(usermodeview.getRoot());
@@ -90,7 +98,7 @@ public class LogInView extends Application{
 		logIn.setOnAction(e -> {
 			//db에서 id, pw 확인
 			//관리자라면 관리자 모드, 사용자라면 사용자 모드
-			if(idtf.getText().equals("administrator"))
+			if(idtf.getText().equals("administrator") && pwtf.getText().equals("administer1234"))
 			{
 				AdministratorView administratorview = new AdministratorView(primaryStage,scene,root);
 				scene.setRoot(administratorview.getRoot());
