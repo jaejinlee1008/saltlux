@@ -8,19 +8,26 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import library.jdbc.VO.RentVO;
-import library.jdbc.controller.GetNotReturnedBookListController;
+import library.jdbc.VO.UserVO;
 
 public class AdministratorView {
 	private BorderPane logIn=null;
 	private Stage primaryStage=null;
 	private Scene scene=null;
-	
-	public AdministratorView(Stage primaryStage, Scene scene, BorderPane root) {
+	private ObservableList<UserVO> userlist = null;
+	private ObservableList<RentVO> rentlist = null;
+	public AdministratorView(Stage primaryStage, Scene scene, BorderPane root, ObservableList<UserVO> userlist, ObservableList<RentVO> rentlist) {
 		this.primaryStage=primaryStage;
 		this.scene = scene;
 		this.logIn=root;
+		this.userlist=userlist;
+		this.rentlist=rentlist;
 	}
 	
 	private Button userInfoSearch;
@@ -28,15 +35,26 @@ public class AdministratorView {
 	private Button searchNotReturnedBook;
 	private Button logOut;
 	
+	private Text notice;
+	
 	public BorderPane getRoot()
 	{
 		BorderPane root = new BorderPane();
 		root.setPrefSize(700, 500);
 		
+		notice = new Text("관리자 모드");
+		notice.setWrappingWidth(700);
+		notice.setTextAlignment(TextAlignment.CENTER);
+		notice.setFont(Font.font(null, FontWeight.BOLD, 30));
+		
 		userInfoSearch = new Button("회원정보 조회");
 		userInfoSearch.setPrefSize(150, 70);
 		userInfoSearch.setOnAction(e -> {
-			UserInfoView userinfoview = new UserInfoView(primaryStage,scene,root);
+			/*
+			 * UserInfoListController controller = new UserInfoListController();
+			 * ObservableList<UserVO> list = controller.getResult();
+			 */
+			UserInfoView userinfoview = new UserInfoView(primaryStage,scene,root,userlist);
 			scene.setRoot(userinfoview.getRoot());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("회원정보 조회");
@@ -55,9 +73,12 @@ public class AdministratorView {
 		searchNotReturnedBook.setPrefSize(150, 70);
 		searchNotReturnedBook.setOnAction(e -> {
 			
-			GetNotReturnedBookListController con = new GetNotReturnedBookListController();
-			ObservableList<RentVO> list = con.getResult();
-			NotReturnedBookView notreturnedbookview = new NotReturnedBookView(root, scene, primaryStage,list);
+			/*
+			 * GetNotReturnedBookListController con = new
+			 * GetNotReturnedBookListController(); ObservableList<RentVO> list =
+			 * con.getResult();
+			 */
+			NotReturnedBookView notreturnedbookview = new NotReturnedBookView(root, scene, primaryStage,rentlist);
 			scene.setRoot(notreturnedbookview.getRoot());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("미납 도서 검색");
@@ -85,6 +106,7 @@ public class AdministratorView {
 		flowpane.setPrefSize(700, 400);
 		flowpane.setVgap(30);
 		flowpane.setOrientation(Orientation.VERTICAL);
+		flowpane.getChildren().add(notice);
 		flowpane.getChildren().add(userInfoSearch);
 		flowpane.getChildren().add(bookSearchAndUpdate);
 		flowpane.getChildren().add(searchNotReturnedBook);

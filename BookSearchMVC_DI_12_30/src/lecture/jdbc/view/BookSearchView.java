@@ -71,7 +71,6 @@ public class BookSearchView extends Application{
 			BookDeleteController controller = new BookDeleteController();
 			ObservableList<BookVO> list = controller.getDeletedResult(deleteISBN,input);
 			tableView.setItems(list);
-			//root.setCenter(tableView);
 		});
 		
 		flowpane.getChildren().add(textField);

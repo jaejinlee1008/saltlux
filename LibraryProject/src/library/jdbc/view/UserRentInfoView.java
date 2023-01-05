@@ -16,8 +16,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import library.jdbc.VO.LogVO;
+import library.jdbc.VO.RentVO;
 import library.jdbc.controller.BookReturnController;
-import library.jdbc.controller.CanReturnCheckController;
+import library.jdbc.controller.GetNotReturnedBookListController;
 import library.jdbc.controller.UserRentLogSearchController;
 
 public class UserRentInfoView {
@@ -28,7 +29,9 @@ public class UserRentInfoView {
 	private Button goBack;
 	private Button btnreturn;
 	private ObservableList<LogVO> list = null;
+	private ObservableList<RentVO> NotReturnedlist = null;
 	private LogVO log=null;
+	
 	public UserRentInfoView(BorderPane admin, Scene scene, Stage primaryStage, ObservableList<LogVO> list) {
 		super();
 		this.user = admin;
@@ -38,9 +41,25 @@ public class UserRentInfoView {
 	}
 	
 	private boolean returnCheck(String bisbn) {
-		CanReturnCheckController controller = new CanReturnCheckController();
-		
-		return controller.getResult(bisbn);
+		/*
+		 * CanReturnCheckController controller = new CanReturnCheckController();
+		 * 
+		 * return controller.getResult(bisbn);
+		 */
+		for(RentVO rent : NotReturnedlist)
+		{
+			if(bisbn.equals(rent.getBisbn()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private void setNotReturnedlist()
+	{
+		GetNotReturnedBookListController controller = new GetNotReturnedBookListController();
+		NotReturnedlist = controller.getResult();
 	}
 	
 	public BorderPane getRoot()
@@ -48,6 +67,7 @@ public class UserRentInfoView {
 		BorderPane root = new BorderPane();
 		root.setPrefSize(700, 500);
 		
+		setNotReturnedlist();
 		
 		goBack=new Button("뒤로가기");
 		goBack.setPrefSize(300, 40);
@@ -110,10 +130,14 @@ public class UserRentInfoView {
 		pointColumn.setMinWidth(80);
 		pointColumn.setCellValueFactory(new PropertyValueFactory<>("point"));
 		
+		TableColumn<LogVO,Date> duedateColumn = new TableColumn<>("반납마감일"); 
+		duedateColumn.setMinWidth(100);
+		duedateColumn.setCellValueFactory(new PropertyValueFactory<>("duedate"));
+		
 		
 		tableView = new TableView<LogVO>();
 		
-		tableView.getColumns().addAll(isbnColumn,titleColumn,idColumn,dateColumn,rentorreturnColumn,pointColumn);
+		tableView.getColumns().addAll(isbnColumn,titleColumn,idColumn,dateColumn,rentorreturnColumn,pointColumn,duedateColumn);
 		
 		tableView.setItems(list);
 		

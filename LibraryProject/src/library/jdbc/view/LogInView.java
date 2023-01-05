@@ -1,20 +1,35 @@
 package library.jdbc.view;
 
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import library.jdbc.VO.LogVO;
+import library.jdbc.VO.RentVO;
+import library.jdbc.VO.UserVO;
+import library.jdbc.controller.GetNotReturnedBookListController;
 import library.jdbc.controller.LogInController;
+import library.jdbc.controller.UserInfoListController;
+import library.jdbc.controller.UserInfoSearchController;
+import library.jdbc.controller.UserRentLogSearchController;
 
 public class LogInView extends Application{
 	
+	private Text notice;
 	private Text id;
 	private Text pw;
 	private TextField idtf;
@@ -32,11 +47,55 @@ public class LogInView extends Application{
 		return b;
 	}
 	
+	private void logIn(Stage primaryStage,Scene scene,BorderPane root,String id, String pw)
+	{
+		if(id.equals("admin") && pw.equals("admin1234"))
+		{
+			UserInfoListController controller = new UserInfoListController();
+			ObservableList<UserVO> userlist = controller.getResult();
+			GetNotReturnedBookListController con = new GetNotReturnedBookListController();
+			ObservableList<RentVO> rentlist = con.getResult();
+			AdministratorView administratorview = new AdministratorView(primaryStage,scene,root,userlist,rentlist);
+			scene.setRoot(administratorview.getRoot());
+			primaryStage.setScene(scene);
+			primaryStage.setTitle("관리자 모드");
+		} else if(loginCheck(id, pw))
+		{
+			UserRentLogSearchController logcon = new UserRentLogSearchController();
+			ObservableList<LogVO> loglist = logcon.getResult(idtf.getText());
+			UserInfoSearchController controller = new UserInfoSearchController();
+			UserVO user = controller.getResult(idtf.getText());
+			UserModeView usermodeview = new UserModeView(primaryStage, scene, root,id,loglist,user);
+			scene.setRoot(usermodeview.getRoot());
+			primaryStage.setScene(scene);
+			primaryStage.setTitle("사용자 모드");
+		}else
+		{
+			showDialog("알림", "로그인 정보가 잘못되었습니다. 다시 확인해주세요");
+		}
+	}
+	
+	public void showDialog(String title, String text)
+	{
+		ButtonType type = new ButtonType("OK",ButtonData.OK_DONE);
+		Dialog<ButtonType> dialog = new Dialog<>();
+		dialog.setTitle(title);
+		dialog.setContentText(text);
+		dialog.getDialogPane().setMinSize(700, 200);
+		dialog.getDialogPane().getButtonTypes().add(type);
+		dialog.show();
+	}
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 		root = new BorderPane();
 		root.setPrefSize(700, 500);
+		
+		notice = new Text("로그인 화면");
+		notice.setWrappingWidth(700);
+		notice.setTextAlignment(TextAlignment.CENTER);
+		notice.setFont(Font.font(null, FontWeight.BOLD, 20));
 		
 		id = new Text("ID");
 		id.setWrappingWidth(50);
@@ -51,20 +110,8 @@ public class LogInView extends Application{
 		pwtf.setPrefSize(200, 40);
 		pwtf.setOnAction(e->{
 			
+			logIn(primaryStage, scene, root, idtf.getText(), pwtf.getText());
 			
-			if(idtf.getText().equals("administrator") && pwtf.getText().equals("administer1234"))
-			{
-				AdministratorView administratorview = new AdministratorView(primaryStage,scene,root);
-				scene.setRoot(administratorview.getRoot());
-				primaryStage.setScene(scene);
-				primaryStage.setTitle("관리자 모드");
-			} else if(loginCheck(idtf.getText(), pwtf.getText()))
-			{
-				UserModeView usermodeview = new UserModeView(primaryStage, scene, root,idtf.getText());
-				scene.setRoot(usermodeview.getRoot());
-				primaryStage.setScene(scene);
-				primaryStage.setTitle("사용자 모드");
-			}
 		});
 		
 		FlowPane idflowpane = new FlowPane();
@@ -89,28 +136,14 @@ public class LogInView extends Application{
 			SignUpView signupview = new SignUpView(primaryStage,scene,root);
 			scene.setRoot(signupview.getSignUp());
 			primaryStage.setScene(scene);
-			primaryStage.setTitle("SignUP");
+			primaryStage.setTitle("회원가입 화면");
 		});
 		
 		
 		logIn = new Button("로그인");
 		logIn.setPrefSize(150, 70);
 		logIn.setOnAction(e -> {
-			//db에서 id, pw 확인
-			//관리자라면 관리자 모드, 사용자라면 사용자 모드
-			if(idtf.getText().equals("administrator") && pwtf.getText().equals("administer1234"))
-			{
-				AdministratorView administratorview = new AdministratorView(primaryStage,scene,root);
-				scene.setRoot(administratorview.getRoot());
-				primaryStage.setScene(scene);
-				primaryStage.setTitle("관리자 모드");
-			}else if(loginCheck(idtf.getText(), pwtf.getText()))
-			{
-				UserModeView usermodeview = new UserModeView(primaryStage, scene, root,idtf.getText());
-				scene.setRoot(usermodeview.getRoot());
-				primaryStage.setScene(scene);
-				primaryStage.setTitle("사용자 모드");
-			}
+			logIn(primaryStage, scene, root, idtf.getText(), pwtf.getText());
 		});
 		
 		
@@ -128,6 +161,7 @@ public class LogInView extends Application{
 		flowpane.setPrefSize(700, 400);
 		flowpane.setVgap(30);
 		flowpane.setOrientation(Orientation.VERTICAL);
+		flowpane.getChildren().add(notice);
 		flowpane.getChildren().add(idflowpane);
 		flowpane.getChildren().add(pwflowpane);
 		
@@ -138,7 +172,7 @@ public class LogInView extends Application{
 		scene = new Scene(root);
 		
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("Library Project");
+		primaryStage.setTitle("재진이의 도서 대여 및 반납 프로그램~!~!~!");
 		primaryStage.setOnCloseRequest(e->{
 			
 		});

@@ -20,6 +20,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import library.jdbc.VO.BookVO;
+import library.jdbc.VO.LogVO;
 import library.jdbc.controller.BookRentController;
 import library.jdbc.controller.BookSearchController;
 import library.jdbc.controller.CanRentCheckController;
@@ -35,6 +36,8 @@ public class UserModeBookSearchView {
 	private Button goBack;
 	private String ID;
 	private String name;
+	private ObservableList<LogVO> loglist=null;
+	
 	public UserModeBookSearchView(BorderPane user, Scene scene, Stage primaryStage, String ID, String name) {
 		super();
 		this.user = user;
@@ -45,7 +48,21 @@ public class UserModeBookSearchView {
 	}
 	
 	
+	public ObservableList<LogVO> getLoglist()
+	{
+		return loglist;
+	}
 	
+	public void showDialog(String title, String text)
+	{
+		ButtonType type = new ButtonType("OK",ButtonData.OK_DONE);
+		Dialog<ButtonType> dialog = new Dialog<>();
+		dialog.setTitle(title);
+		dialog.setContentText(text);
+		dialog.getDialogPane().setMinSize(700, 200);
+		dialog.getDialogPane().getButtonTypes().add(type);
+		dialog.show();
+	}
 
 	public BorderPane getRoot()
 	{
@@ -60,16 +77,20 @@ public class UserModeBookSearchView {
 			primaryStage.setTitle("사용자 모드");
 		});
 		
-		// 2. BorderPane 아래쪽에 붙일 판자(FlowPane)를 하나 생성
+		
 		FlowPane flowpane = new FlowPane();
 		flowpane.setPadding(new Insets(10,10,10,10));
 		flowpane.setColumnHalignment(HPos.CENTER);
 		flowpane.setPrefSize(700, 40);
 		flowpane.setHgap(30);
 		
-		// 3. 각각의 component를 생성해서 붙인다.
+		
 		keywordtf = new TextField();
 		keywordtf.setPrefSize(250, 40);
+		keywordtf.setText("검색어를 입력하세요.");
+		keywordtf.setOnMouseClicked(e->{
+			keywordtf.clear();
+		});
 		keywordtf.setOnAction(e -> {
 			keywordstr = keywordtf.getText();
 			BookSearchController controller = new BookSearchController();
@@ -136,23 +157,11 @@ public class UserModeBookSearchView {
 							    	
 							    	BookRentController rentcontroller = new BookRentController();
 							    	rentcontroller.setResult(book.getBisbn(),book.getBtitle(),ID,"N");
-							    	rentcontroller.setResult(book.getBtitle(), book.getBisbn(), ID, name, "대여", 0);
-							    	ButtonType type1 = new ButtonType("OK",ButtonData.OK_DONE);
-									Dialog<ButtonType> dialog1 = new Dialog<>();
-									dialog1.setTitle("알림");
-									dialog1.setContentText("대여 성공");
-									dialog1.getDialogPane().setMinSize(700, 200);
-									dialog1.getDialogPane().getButtonTypes().add(type1);
-									dialog1.show();
+							    	loglist = rentcontroller.setResult(book.getBtitle(), book.getBisbn(), ID, name, "대여", 0);
+							    	showDialog("알림", "대여 성공");
 							    }else
 							    {
-							    	ButtonType type2 = new ButtonType("OK",ButtonData.OK_DONE);
-									Dialog<ButtonType> dialog1 = new Dialog<>();
-									dialog1.setTitle("알림");
-									dialog1.setContentText("대여 실패");
-									dialog1.getDialogPane().setMinSize(700, 200);
-									dialog1.getDialogPane().getButtonTypes().add(type2);
-									dialog1.show();
+							    	showDialog("알림", "대여 실패");
 							    }
 							} catch (Exception e2) {
 								// TODO: handle exception
@@ -160,22 +169,11 @@ public class UserModeBookSearchView {
 							
 					  	}else
 					  	{
-					  		ButtonType type = new ButtonType("OK",ButtonData.OK_DONE);
-							Dialog<ButtonType> dialog = new Dialog<>();
-							dialog.setTitle("대여 알림");
-							dialog.setContentText("대여가 불가능합니다.");
-							dialog.getDialogPane().setMinSize(700, 200);
-							dialog.getDialogPane().getButtonTypes().add(type);
-							dialog.show();
+					  		showDialog("대여 알림", "이미 대출된 도서입니다, 대여가 불가능합니다.");
 					  	}
-					    
 				  }
-				 
 			});
 			
-			
-			
-			//해당 행을 리턴하는 방식
 			return row;
 		});
 		

@@ -10,15 +10,23 @@ public class LogVO {
 	private Date date;
 	private String rentORreturn;
 	private int point;
-	public LogVO(String btitle, String bisbn, String iD, String name, Date date, String rentORreturn, int point) {
+	private Date duedate;
+	public LogVO(String btitle, String bisbn, String ID, String name, Date date, String rentORreturn, int point, Date duedate) {
 		super();
 		this.btitle = btitle;
 		this.bisbn = bisbn;
-		ID = iD;
+		this.ID = ID;
 		this.name = name;
 		this.date = date;
 		this.rentORreturn = rentORreturn;
 		this.point = point;
+		this.duedate = duedate;
+	}
+	public Date getDuedate() {
+		return duedate;
+	}
+	public void setDuedate(Date duedate) {
+		this.duedate = duedate;
 	}
 	public String getBtitle() {
 		return btitle;

@@ -1,11 +1,13 @@
 package library.jdbc.view;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -13,6 +15,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import library.jdbc.VO.BookVO;
+import library.jdbc.controller.BookDeleteController;
+import library.jdbc.controller.BookSearchController;
 
 
 
@@ -28,10 +32,24 @@ public class BookSearchAndUpdateView {
 	private Button insert;
 	private Button goBack;
 	
+	private String keywordstr="";
+	private String deleteISBN="";
+	
+	private BookVO book=null;
+	
+	public BookSearchAndUpdateView() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	public BookSearchAndUpdateView(Stage primaryStage, Scene scene, BorderPane root) {
 		this.admin=root;
 		this.scene=scene;
 		this.primaryStage=primaryStage;
+	}
+	
+	public void SetTableView(TableView<BookVO> tableView)
+	{
+		this.tableView=tableView;
 	}
 	
 	public BorderPane getRoot()
@@ -41,22 +59,45 @@ public class BookSearchAndUpdateView {
 		
 		keyword = new TextField();
 		keyword.setPrefSize(250, 40);
+		keyword.setText("검색어를 입력하세요.");
+		keyword.setOnMouseClicked(e->{
+			keyword.clear();
+		});
+		keyword.setOnAction(e->{
+			keywordstr = keyword.getText();
+			BookSearchController controller = new BookSearchController();
+			ObservableList<BookVO> list =  controller.getResult(keywordstr);
+			tableView.setItems(list);
+		});
 		
 		delete=new Button("삭제");
 		delete.setPrefSize(80, 40);
+		delete.setDisable(true);
 		delete.setOnAction(e->{
-			
+			BookDeleteController controller = new BookDeleteController();
+			ObservableList<BookVO> list = controller.getDeletedResult(deleteISBN,keywordstr);
+			tableView.setItems(list);
 		});
 		
 		update=new Button("수정");
 		update.setPrefSize(80, 40);
+		update.setDisable(true);
 		update.setOnAction(e->{
-			
+			if(book!=null)
+			{
+				BookUpdateView bookupdateview = new BookUpdateView(root, scene, primaryStage, book, tableView,keywordstr);
+				scene.setRoot(bookupdateview.getRoot());
+				primaryStage.setScene(scene);
+				
+			}
 		});
 		
 		insert=new Button("입력");
 		insert.setPrefSize(80, 40);
 		insert.setOnAction(e->{
+			BookInsertView bookinsertview = new BookInsertView(root, scene, primaryStage, tableView, keywordstr);
+			scene.setRoot(bookinsertview.getRoot());
+			primaryStage.setScene(scene);
 		});
 		
 		goBack=new Button("뒤로가기");
@@ -101,6 +142,25 @@ public class BookSearchAndUpdateView {
 		
 		tableView.getColumns().addAll(isbnColumn,titleColumn,authorColumn,priceColumn);
 		
+		tableView.setRowFactory(e -> {
+			
+			TableRow<BookVO> row = new TableRow<>();
+			
+			row.setOnMouseClicked(e1->{
+				delete.setDisable(false);
+				update.setDisable(false);
+				try {
+					book = row.getItem();
+					
+					deleteISBN=book.getBisbn();
+				} catch (Exception e2) {
+					// TODO: handle exception
+				}
+				
+				
+			});
+			return row;
+		});
 		
 		root.setCenter(tableView);
 		root.setBottom(flowpane);
