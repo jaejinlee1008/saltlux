@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -33,7 +34,7 @@ public class LogInView extends Application{
 	private Text id;
 	private Text pw;
 	private TextField idtf;
-	private TextField pwtf;
+	private PasswordField pwf;
 	private Button signUp;
 	private Button logIn;
 	
@@ -106,11 +107,11 @@ public class LogInView extends Application{
 		idtf = new TextField();
 		idtf.setPrefSize(200, 40);
 		
-		pwtf = new TextField();
-		pwtf.setPrefSize(200, 40);
-		pwtf.setOnAction(e->{
+		pwf = new PasswordField();
+		pwf.setPrefSize(200, 40);
+		pwf.setOnAction(e->{
 			
-			logIn(primaryStage, scene, root, idtf.getText(), pwtf.getText());
+			logIn(primaryStage, scene, root, idtf.getText(), pwf.getText());
 			
 		});
 		
@@ -128,7 +129,7 @@ public class LogInView extends Application{
 		pwflowpane.setPrefSize(700, 60);
 		pwflowpane.setHgap(10);
 		pwflowpane.getChildren().add(pw);
-		pwflowpane.getChildren().add(pwtf);
+		pwflowpane.getChildren().add(pwf);
 		
 		signUp = new Button("회원가입");
 		signUp.setPrefSize(150, 70);
@@ -143,7 +144,7 @@ public class LogInView extends Application{
 		logIn = new Button("로그인");
 		logIn.setPrefSize(150, 70);
 		logIn.setOnAction(e -> {
-			logIn(primaryStage, scene, root, idtf.getText(), pwtf.getText());
+			logIn(primaryStage, scene, root, idtf.getText(), pwf.getText());
 		});
 		
 		
