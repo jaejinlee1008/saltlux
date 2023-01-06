@@ -571,4 +571,28 @@ public class LibraryService {
 		}
 		return false;
 	}
+
+	public boolean getCanUseId(String id) {
+		UserVO user = null;
+		Connection con = null;
+		try {
+			con = (DBCPConnectionPool.getDataSource()).getConnection();
+			con.setAutoCommit(false);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		LibraryDAO dao = new LibraryDAO(con);
+		user = dao.selectUserid(id);
+		
+		
+		if((id.length()>=1 && id.length()<=15)  && (user==null) )
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

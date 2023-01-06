@@ -69,12 +69,14 @@ public class UserUpdatePwView {
 		
 		pwtf = new TextField();
 		pwtf.setPrefSize(200, 40);
+		pwtf.setPromptText("새로운 비밀번호를 입력해주세요");
 		
 		pwcheck = new Text("비밀번호확인");
 		pwcheck.setWrappingWidth(50);
 		
 		pwchecktf = new TextField();
 		pwchecktf.setPrefSize(200, 40);
+		pwchecktf.setPromptText("새로운 비밀번호 확인");
 		pwchecktf.setOnAction(e->{
 			CheckCanUpdatePWController controller = new CheckCanUpdatePWController();
 			if(controller.getResult(id,pwtf.getText(),pwchecktf.getText()))

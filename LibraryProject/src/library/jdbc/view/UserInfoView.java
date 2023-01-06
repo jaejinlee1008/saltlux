@@ -8,11 +8,16 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import library.jdbc.VO.UserVO;
 
@@ -21,15 +26,19 @@ public class UserInfoView {
 	TableView<UserVO> tableView;
 	ObservableList<UserVO> list=null;
 	private BorderPane admin=null;
+	private BorderPane logIn=null;
 	private Scene scene = null;
 	private Stage primaryStage = null;
 	private Button goBack;
+	private Text notice;
+	private Hyperlink logout;
 	
-	public UserInfoView(Stage primaryStage, Scene scene, BorderPane root,ObservableList<UserVO> list) {
+	public UserInfoView(Stage primaryStage, Scene scene, BorderPane root,ObservableList<UserVO> list, BorderPane logIn) {
 		this.admin=root;
 		this.scene=scene;
 		this.primaryStage=primaryStage;
 		this.list=list;
+		this.logIn=logIn;
 	}
 
 	public BorderPane getRoot()
@@ -37,6 +46,16 @@ public class UserInfoView {
 		BorderPane root = new BorderPane();
 		root.setPrefSize(700, 500);
 		
+		notice = new Text("회원 정보 조회");
+		notice.setWrappingWidth(500);
+		notice.setTextAlignment(TextAlignment.CENTER);
+		notice.setFont(Font.font(null, FontWeight.BOLD, 20));
+		
+		logout = new Hyperlink("로그아웃");
+		logout.setOnAction(e->{
+			scene.setRoot(logIn);
+			primaryStage.setScene(scene);
+		});
 		
 		goBack=new Button("뒤로가기");
 		goBack.setPrefSize(300, 30);
@@ -53,6 +72,15 @@ public class UserInfoView {
 		flowpane.setPrefSize(700, 40);
 		flowpane.setHgap(10);
 		flowpane.getChildren().add(goBack);
+		
+		FlowPane topflowpane = new FlowPane();
+		topflowpane.setPadding(new Insets(10,10,10,10));
+		topflowpane.setAlignment(Pos.CENTER_RIGHT);
+		topflowpane.setColumnHalignment(HPos.CENTER);
+		topflowpane.setPrefSize(700, 80);
+		topflowpane.setHgap(10);
+		topflowpane.getChildren().add(notice);
+		topflowpane.getChildren().add(logout);
 		
 		
 		TableColumn<UserVO,String> nameColumn = new TableColumn<>("이름"); 
@@ -89,6 +117,7 @@ public class UserInfoView {
 		
 		tableView.setItems(list);
 		
+		root.setTop(topflowpane);
 		root.setCenter(tableView);
 		root.setBottom(flowpane);
 		

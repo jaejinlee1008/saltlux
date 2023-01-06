@@ -3,6 +3,7 @@ package library.jdbc.view;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -10,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -34,9 +36,11 @@ public class LogInView extends Application{
 	private Text id;
 	private Text pw;
 	private TextField idtf;
+	private TextField pwtf;
 	private PasswordField pwf;
 	private Button signUp;
 	private Button logIn;
+	private Hyperlink showpw;
 	
 	private BorderPane root = null;
 	private Scene scene=null;
@@ -106,30 +110,56 @@ public class LogInView extends Application{
 		
 		idtf = new TextField();
 		idtf.setPrefSize(200, 40);
+		idtf.setPromptText("아이디");
+		
+		pwtf = new TextField();
+		pwtf.setPrefSize(200, 40);
+		pwtf.setOnAction(e->{
+			logIn(primaryStage, scene, root, idtf.getText(), pwtf.getText());
+		});
+		
 		
 		pwf = new PasswordField();
 		pwf.setPrefSize(200, 40);
+		pwf.setPromptText("비밀번호");
 		pwf.setOnAction(e->{
 			
 			logIn(primaryStage, scene, root, idtf.getText(), pwf.getText());
 			
 		});
 		
+		showpw = new Hyperlink("show");
+		showpw.setPrefSize(50, 50);
+		showpw.setAlignment(Pos.CENTER_LEFT);
+		
+		
 		FlowPane idflowpane = new FlowPane();
-		idflowpane.setAlignment(Pos.CENTER);
+		idflowpane.setPadding(new Insets(0,0,0,200));
+		idflowpane.setAlignment(Pos.CENTER_LEFT);
 		idflowpane.setColumnHalignment(HPos.CENTER);
 		idflowpane.setPrefSize(700, 60);
 		idflowpane.setHgap(10);
 		idflowpane.getChildren().add(id);
 		idflowpane.getChildren().add(idtf);
 		
+		
 		FlowPane pwflowpane = new FlowPane();
-		pwflowpane.setAlignment(Pos.CENTER);
+		pwflowpane.setPadding(new Insets(0,0,0,200));
+		pwflowpane.setAlignment(Pos.CENTER_LEFT);
 		pwflowpane.setColumnHalignment(HPos.CENTER);
 		pwflowpane.setPrefSize(700, 60);
 		pwflowpane.setHgap(10);
 		pwflowpane.getChildren().add(pw);
 		pwflowpane.getChildren().add(pwf);
+		pwflowpane.getChildren().add(showpw);
+		
+		showpw.setOnAction(e->{
+			String inputpw = pwf.getText();
+			pwflowpane.getChildren().remove(1);
+			pwflowpane.getChildren().add(1, pwtf);
+			pwtf.setText(inputpw);
+			pwtf.requestFocus();
+		});
 		
 		signUp = new Button("회원가입");
 		signUp.setPrefSize(150, 70);
@@ -144,7 +174,14 @@ public class LogInView extends Application{
 		logIn = new Button("로그인");
 		logIn.setPrefSize(150, 70);
 		logIn.setOnAction(e -> {
-			logIn(primaryStage, scene, root, idtf.getText(), pwf.getText());
+			if(pwtf.getText().isEmpty())
+			{
+				logIn(primaryStage, scene, root, idtf.getText(), pwf.getText());
+			}else
+			{
+				logIn(primaryStage, scene, root, idtf.getText(), pwtf.getText());
+			}
+			
 		});
 		
 		
@@ -165,7 +202,6 @@ public class LogInView extends Application{
 		flowpane.getChildren().add(notice);
 		flowpane.getChildren().add(idflowpane);
 		flowpane.getChildren().add(pwflowpane);
-		
 		
 		root.setCenter(flowpane);
 		root.setBottom(bottomflowpane);

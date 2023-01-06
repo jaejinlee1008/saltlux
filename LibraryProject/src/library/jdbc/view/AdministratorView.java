@@ -54,7 +54,7 @@ public class AdministratorView {
 			 * UserInfoListController controller = new UserInfoListController();
 			 * ObservableList<UserVO> list = controller.getResult();
 			 */
-			UserInfoView userinfoview = new UserInfoView(primaryStage,scene,root,userlist);
+			UserInfoView userinfoview = new UserInfoView(primaryStage,scene,root,userlist,logIn);
 			scene.setRoot(userinfoview.getRoot());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("회원정보 조회");
@@ -63,7 +63,7 @@ public class AdministratorView {
 		bookSearchAndUpdate = new Button("도서 검색 및 수정");
 		bookSearchAndUpdate.setPrefSize(150, 70);
 		bookSearchAndUpdate.setOnAction(e -> {
-			BookSearchAndUpdateView booksearchandupdateview = new BookSearchAndUpdateView(primaryStage, scene, root);
+			BookSearchAndUpdateView booksearchandupdateview = new BookSearchAndUpdateView(primaryStage, scene, root, logIn);
 			scene.setRoot(booksearchandupdateview.getRoot());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("도서 검색 및 수정");
@@ -78,7 +78,7 @@ public class AdministratorView {
 			 * GetNotReturnedBookListController(); ObservableList<RentVO> list =
 			 * con.getResult();
 			 */
-			NotReturnedBookView notreturnedbookview = new NotReturnedBookView(root, scene, primaryStage,rentlist);
+			NotReturnedBookView notreturnedbookview = new NotReturnedBookView(root, scene, primaryStage,rentlist, logIn );
 			scene.setRoot(notreturnedbookview.getRoot());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("미납 도서 검색");

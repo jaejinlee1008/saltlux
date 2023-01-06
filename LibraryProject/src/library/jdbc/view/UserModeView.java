@@ -6,7 +6,6 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Font;
@@ -43,7 +42,7 @@ public class UserModeView {
 	private Button userInfoSearchAndUpdate;
 	private Button searchBook;
 	private Button logOut;
-	private Dialog<String> dialog;
+	//private Dialog<String> dialog;
 	public BorderPane getRoot()
 	{
 		BorderPane root = new BorderPane();
@@ -72,9 +71,12 @@ public class UserModeView {
 			 */
 			if(usermodebooksearchview!=null)
 			{
-				loglist = usermodebooksearchview.getLoglist();
+				if(usermodebooksearchview.getLoglist()!=null)
+				{
+					loglist = usermodebooksearchview.getLoglist();
+				}
 			}
-			UserRentInfoView userrentinfoview = new UserRentInfoView(root, scene, primaryStage, loglist);
+			UserRentInfoView userrentinfoview = new UserRentInfoView(root, scene, primaryStage, loglist,logIn);
 			scene.setRoot(userrentinfoview.getRoot());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("대여 내역 조회");
@@ -100,7 +102,7 @@ public class UserModeView {
 			 * UserInfoSearchController controller = new UserInfoSearchController(); UserVO
 			 * user = controller.getResult(ID);
 			 */
-			usermodebooksearchview = new UserModeBookSearchView(root, scene, primaryStage,ID,user.getName());
+			usermodebooksearchview = new UserModeBookSearchView(logIn,root, scene, primaryStage,ID,user.getName());
 			scene.setRoot(usermodebooksearchview.getRoot());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("도서 검색");

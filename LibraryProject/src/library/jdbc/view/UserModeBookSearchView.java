@@ -6,11 +6,13 @@ import java.util.Optional;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -18,6 +20,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import library.jdbc.VO.BookVO;
 import library.jdbc.VO.LogVO;
@@ -29,6 +35,7 @@ import library.jdbc.controller.CanRentCheckController;
 public class UserModeBookSearchView {
 	TableView<BookVO> tableView=null;
 	private BorderPane user=null;
+	private BorderPane logIn=null;
 	private Scene scene = null;
 	private Stage primaryStage = null;
 	private TextField keywordtf;
@@ -36,10 +43,13 @@ public class UserModeBookSearchView {
 	private Button goBack;
 	private String ID;
 	private String name;
+	private Text notice;
+	private Hyperlink logout;
 	private ObservableList<LogVO> loglist=null;
 	
-	public UserModeBookSearchView(BorderPane user, Scene scene, Stage primaryStage, String ID, String name) {
+	public UserModeBookSearchView(BorderPane logIn, BorderPane user, Scene scene, Stage primaryStage, String ID, String name) {
 		super();
+		this.logIn=logIn;
 		this.user = user;
 		this.scene = scene;
 		this.primaryStage = primaryStage;
@@ -77,6 +87,25 @@ public class UserModeBookSearchView {
 			primaryStage.setTitle("사용자 모드");
 		});
 		
+		notice = new Text("도서 검색 및 대여");
+		notice.setWrappingWidth(500);
+		notice.setTextAlignment(TextAlignment.CENTER);
+		notice.setFont(Font.font(null, FontWeight.BOLD, 20));
+		
+		logout = new Hyperlink("로그아웃");
+		logout.setOnAction(e->{
+			scene.setRoot(logIn);
+			primaryStage.setScene(scene);
+		});
+		
+		FlowPane topflowpane = new FlowPane();
+		topflowpane.setPadding(new Insets(10,10,10,10));
+		topflowpane.setAlignment(Pos.CENTER_RIGHT);
+		topflowpane.setColumnHalignment(HPos.CENTER);
+		topflowpane.setPrefSize(700, 80);
+		topflowpane.setHgap(10);
+		topflowpane.getChildren().add(notice);
+		topflowpane.getChildren().add(logout);
 		
 		FlowPane flowpane = new FlowPane();
 		flowpane.setPadding(new Insets(10,10,10,10));
@@ -87,7 +116,7 @@ public class UserModeBookSearchView {
 		
 		keywordtf = new TextField();
 		keywordtf.setPrefSize(250, 40);
-		keywordtf.setText("검색어를 입력하세요.");
+		keywordtf.setPromptText("검색어를 입력하세요.");
 		keywordtf.setOnMouseClicked(e->{
 			keywordtf.clear();
 		});
@@ -176,7 +205,7 @@ public class UserModeBookSearchView {
 			
 			return row;
 		});
-		
+		root.setTop(topflowpane);
 		root.setCenter(tableView);
 		root.setBottom(flowpane);
 		

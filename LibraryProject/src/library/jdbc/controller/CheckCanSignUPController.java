@@ -10,4 +10,9 @@ public class CheckCanSignUPController {
 		return service.getCanSignUP(name, id, pw, pwcheck, email);
 	}
 
+	public boolean getResult(String id) {
+		LibraryService service = new LibraryService();
+		return service.getCanUseId(id);
+	}
+
 }

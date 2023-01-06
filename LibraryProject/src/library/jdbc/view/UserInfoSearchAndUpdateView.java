@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -45,7 +46,7 @@ public class UserInfoSearchAndUpdateView {
 	private TextField emailtf;
 	private TextField indatetf;	
 	private TextField pointtf;
-	
+	private Hyperlink logout;
 	private UserVO uservo=null;
 
 	public UserInfoSearchAndUpdateView(BorderPane login, BorderPane user, Scene scene, Stage primaryStage, UserVO uservo) {
@@ -75,9 +76,15 @@ public class UserInfoSearchAndUpdateView {
 		
 		
 		notice = new Text("개인정보 수정 및 조회");
-		notice.setWrappingWidth(700);
+		notice.setWrappingWidth(500);
 		notice.setTextAlignment(TextAlignment.CENTER);
-		notice.setFont(Font.font(null, FontWeight.BOLD, 30));
+		notice.setFont(Font.font(null, FontWeight.BOLD, 20));
+		
+		logout = new Hyperlink("로그아웃");
+		logout.setOnAction(e->{
+			scene.setRoot(login);
+			primaryStage.setScene(scene);
+		});
 		
 		name = new Text("이름");
 		name.setWrappingWidth(50);
@@ -244,9 +251,8 @@ public class UserInfoSearchAndUpdateView {
 		centerflowpane.setPadding(new Insets(10,10,10,10));
 		centerflowpane.setAlignment(Pos.CENTER);
 		centerflowpane.setColumnHalignment(HPos.CENTER);
-		centerflowpane.setPrefSize(700, 400);
+		centerflowpane.setPrefSize(700, 300);
 		centerflowpane.setVgap(10);
-		centerflowpane.getChildren().add(notice);
 		centerflowpane.getChildren().add(nameflowpane);
 		centerflowpane.getChildren().add(idflowpane);
 		centerflowpane.getChildren().add(emailflowpane);
@@ -254,17 +260,26 @@ public class UserInfoSearchAndUpdateView {
 		centerflowpane.getChildren().add(pointflowpane);
 		centerflowpane.getChildren().add(updateflowpane);
 		
+		FlowPane topflowpane = new FlowPane();
+		topflowpane.setPadding(new Insets(10,10,10,0));
+		topflowpane.setAlignment(Pos.CENTER);
+		topflowpane.setColumnHalignment(HPos.CENTER);
+		topflowpane.setPrefSize(700, 50);
+		topflowpane.setHgap(0);
+		topflowpane.getChildren().add(notice);
+		topflowpane.getChildren().add(logout);
+		
 		FlowPane flowpane = new FlowPane();
 		flowpane.setPadding(new Insets(10,10,10,10));
 		flowpane.setAlignment(Pos.CENTER);
 		flowpane.setColumnHalignment(HPos.CENTER);
-		flowpane.setPrefSize(700, 100);
+		flowpane.setPrefSize(700, 80);
 		flowpane.setHgap(10);
 		flowpane.getChildren().add(unregister);
 		flowpane.getChildren().add(goBack);
 		
 		
-		
+		root.setTop(topflowpane);
 		root.setCenter(centerflowpane);
 		root.setBottom(flowpane);
 		

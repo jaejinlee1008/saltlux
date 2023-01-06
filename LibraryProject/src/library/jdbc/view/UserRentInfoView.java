@@ -8,12 +8,17 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import library.jdbc.VO.LogVO;
 import library.jdbc.VO.RentVO;
@@ -24,6 +29,7 @@ import library.jdbc.controller.UserRentLogSearchController;
 public class UserRentInfoView {
 	TableView<LogVO> tableView;
 	private BorderPane user=null;
+	private BorderPane logIn=null;	
 	private Scene scene = null;
 	private Stage primaryStage = null;
 	private Button goBack;
@@ -32,12 +38,16 @@ public class UserRentInfoView {
 	private ObservableList<RentVO> NotReturnedlist = null;
 	private LogVO log=null;
 	
-	public UserRentInfoView(BorderPane admin, Scene scene, Stage primaryStage, ObservableList<LogVO> list) {
+	private Text notice;
+	private Hyperlink logout;
+	
+	public UserRentInfoView(BorderPane admin, Scene scene, Stage primaryStage, ObservableList<LogVO> list, BorderPane logIn) {
 		super();
 		this.user = admin;
 		this.scene = scene;
 		this.primaryStage = primaryStage;
 		this.list = list;
+		this.logIn=logIn;
 	}
 	
 	private boolean returnCheck(String bisbn) {
@@ -68,6 +78,17 @@ public class UserRentInfoView {
 		root.setPrefSize(700, 500);
 		
 		setNotReturnedlist();
+		
+		notice = new Text("대여 내역 조회");
+		notice.setWrappingWidth(500);
+		notice.setTextAlignment(TextAlignment.CENTER);
+		notice.setFont(Font.font(null, FontWeight.BOLD, 20));
+		
+		logout = new Hyperlink("로그아웃");
+		logout.setOnAction(e->{
+			scene.setRoot(logIn);
+			primaryStage.setScene(scene);
+		});
 		
 		goBack=new Button("뒤로가기");
 		goBack.setPrefSize(300, 40);
@@ -101,6 +122,14 @@ public class UserRentInfoView {
 		flowpane.getChildren().add(goBack);
 		flowpane.getChildren().add(btnreturn);
 		
+		FlowPane topflowpane = new FlowPane();
+		topflowpane.setPadding(new Insets(10,10,10,10));
+		topflowpane.setAlignment(Pos.CENTER_RIGHT);
+		topflowpane.setColumnHalignment(HPos.CENTER);
+		topflowpane.setPrefSize(700, 80);
+		topflowpane.setHgap(10);
+		topflowpane.getChildren().add(notice);
+		topflowpane.getChildren().add(logout);
 		
 		TableColumn<LogVO,String> titleColumn = new TableColumn<>("책 제목"); 
 		titleColumn.setMinWidth(130);
@@ -162,7 +191,7 @@ public class UserRentInfoView {
 			
 			return row;
 		});
-		
+		root.setTop(topflowpane);
 		root.setCenter(tableView);
 		root.setBottom(flowpane);
 		

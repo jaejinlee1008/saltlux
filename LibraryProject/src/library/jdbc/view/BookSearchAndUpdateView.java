@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -13,6 +14,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import library.jdbc.VO.BookVO;
 import library.jdbc.controller.BookDeleteController;
@@ -23,6 +28,7 @@ import library.jdbc.controller.BookSearchController;
 public class BookSearchAndUpdateView {
 	TableView<BookVO> tableView;
 	private BorderPane admin=null;
+	private BorderPane logIn=null;
 	private Scene scene = null;
 	private Stage primaryStage = null;
 	
@@ -31,6 +37,8 @@ public class BookSearchAndUpdateView {
 	private Button update;
 	private Button insert;
 	private Button goBack;
+	private Text notice;
+	private Hyperlink logout;
 	
 	private String keywordstr="";
 	private String deleteISBN="";
@@ -41,10 +49,11 @@ public class BookSearchAndUpdateView {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public BookSearchAndUpdateView(Stage primaryStage, Scene scene, BorderPane root) {
+	public BookSearchAndUpdateView(Stage primaryStage, Scene scene, BorderPane root, BorderPane logIn) {
 		this.admin=root;
 		this.scene=scene;
 		this.primaryStage=primaryStage;
+		this.logIn=logIn;
 	}
 	
 	public void SetTableView(TableView<BookVO> tableView)
@@ -56,6 +65,18 @@ public class BookSearchAndUpdateView {
 	{
 		BorderPane root = new BorderPane();
 		root.setPrefSize(700, 500);
+		
+		notice = new Text("도서 검색 및 수정");
+		notice.setWrappingWidth(500);
+		notice.setTextAlignment(TextAlignment.CENTER);
+		notice.setFont(Font.font(null, FontWeight.BOLD, 20));
+		
+		logout = new Hyperlink("로그아웃");
+		logout.setOnAction(e->{
+			scene.setRoot(logIn);
+			primaryStage.setScene(scene);
+		});
+		
 		
 		keyword = new TextField();
 		keyword.setPrefSize(250, 40);
@@ -120,6 +141,15 @@ public class BookSearchAndUpdateView {
 		flowpane.getChildren().add(insert);
 		flowpane.getChildren().add(goBack);
 		
+		FlowPane topflowpane = new FlowPane();
+		topflowpane.setPadding(new Insets(10,10,10,10));
+		topflowpane.setAlignment(Pos.CENTER_RIGHT);
+		topflowpane.setColumnHalignment(HPos.CENTER);
+		topflowpane.setPrefSize(700, 80);
+		topflowpane.setHgap(10);
+		topflowpane.getChildren().add(notice);
+		topflowpane.getChildren().add(logout);
+		
 		
 		TableColumn<BookVO,String> isbnColumn = new TableColumn<>("ISBN"); 
 		isbnColumn.setMinWidth(150);
@@ -162,6 +192,7 @@ public class BookSearchAndUpdateView {
 			return row;
 		});
 		
+		root.setTop(topflowpane);
 		root.setCenter(tableView);
 		root.setBottom(flowpane);
 		
