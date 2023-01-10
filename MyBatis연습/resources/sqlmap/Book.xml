@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- mapper XML파일은 1개가 아니다 -->
+<mapper namespace="example.myBook">
+
+	<select id="selectBookByISBNHashMap" parameterType="String"
+			resultType="HashMap">
+		<![CDATA[
+		SELECT bisbn, btitle, bauthor, bprice
+		FROM book
+		WHERE bisbn = #{isbn}
+		]]>
+	</select>
+	
+	<select id="selectAllHashMap" resultType = "HashMap">
+		<![CDATA[
+		SELECT bisbn, btitle, bauthor, bprice
+		FROM book
+		]]>
+	</select>
+	<!-- select에서 가져온 column과 매칭되는 vo의 field를 찾아서 값을 매핑 -->
+	<select id="selectByISBNBookVO" parameterType="String"
+			resultType="Book">
+		<![CDATA[
+		SELECT bisbn, btitle, bauthor, bprice
+		FROM book
+		WHERE bisbn = #{isbn}
+		]]>
+	</select>
+	
+	
+	<!-- column : select해서 나온 결과 집합의 컬럼명
+		 property : VO의 field명
+	 -->
+	<resultMap id="testMap" type="Book" >
+		<result column="b_isbn" property="bisbn"/>
+		<result column="b_title" property="btitle"/>
+		<result column="b_author" property="bauthor"/>
+		<result column="b_price" property="bprice"/>	
+	</resultMap>
+	<select id="selectByISBNResultMap" parameterType="String"
+			resultMap="testMap">
+		<![CDATA[
+		SELECT bisbn AS b_isbn, 
+			   btitle AS b_title,
+			   bauthor AS b_author,
+			   bprice AS b_price
+		FROM book
+		WHERE bisbn = #{isbn}
+		]]>
+	</select>
+	
+	<update id="update" parameterType="Book">
+		<![CDATA[
+		UPDATE book
+		SET btitle = #{btitle},
+			bauthor = #{bauthor},
+			bprice = #{bprice}
+		WHERE bisbn = #{bisbn}
+		]]>
+	</update>
+	
+</mapper>
