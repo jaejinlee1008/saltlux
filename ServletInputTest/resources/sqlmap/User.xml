@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="library.myuser">
+
+  	<select id="selectUserByidpw" parameterType="HashMap"
+			resultType="User">
+		<![CDATA[
+		SELECT * FROM users WHERE ID = #{ID} AND PW = #{PW} AND isout = 'N'
+		]]>
+	</select>
+	
+	<select id="selectUserByid" parameterType="String"
+			resultType="User">
+		<![CDATA[
+		SELECT * FROM users WHERE ID = #{ID} 
+		]]>
+	</select>
+	
+	<select id="selectUserByemail" parameterType="String"
+			resultType="User">
+		<![CDATA[
+		SELECT * FROM users WHERE email = #{email} AND isout = 'N'
+		]]>
+	</select>
+	
+	<select id="selectAll" resultType="HashMap">
+		<![CDATA[
+		SELECT * FROM users
+		]]>
+	</select>
+	
+	<insert id="insert" parameterType="User">
+		<![CDATA[
+		INSERT INTO users (name,ID,PW,email,point,indate) VALUES(#{name},#{ID},#{PW},#{email},#{point},#{indate})
+		]]>
+	</insert>
+	
+	<insert id="updateEmail" parameterType="HashMap">
+		<![CDATA[
+		UPDATE users SET email = #{email} WHERE ID = #{ID}
+		]]>
+	</insert>
+	
+	<update id="updatePw" parameterType="HashMap">
+		<![CDATA[
+		UPDATE users SET PW = #{PW} WHERE ID = #{ID}
+		]]>
+	</update>
+	
+	<update id="updateIsout" parameterType="HashMap">
+		<![CDATA[
+		UPDATE users SET isout = 'Y', outdate = #{outdate} WHERE ID = #{ID} 
+		]]>
+	</update>
+	
+	<update id="updatePoint" parameterType="HashMap">
+		<![CDATA[
+		UPDATE users SET point = #{point} WHERE ID = #{ID}
+		]]>
+	</update>
+	
+</mapper>

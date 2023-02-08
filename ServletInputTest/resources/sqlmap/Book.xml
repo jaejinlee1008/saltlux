@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- mapper XML파일은 1개가 아니다 -->
+<mapper namespace="servlet.myBook">
+
+	<select id="selectBookByISBNHashMap" parameterType="String"
+			resultType="HashMap">
+		<![CDATA[
+		SELECT bisbn, btitle, bauthor, bprice
+		FROM book
+		WHERE bisbn = #{isbn}
+		]]>
+	</select>
+	
+	<select id="selectListByid" parameterType="HashMap" resultType="HashMap">
+		<![CDATA[
+		SELECT bisbn,btitle, bauthor,bprice FROM book WHERE btitle like CONCAT('%', #{input}, '%') AND bprice < #{price} ORDER BY bprice DESC
+		]]>
+	</select>
+	
+	<select id="selectByISBN" parameterType="String" resultType="Book">
+		<![CDATA[
+		SELECT * FROM book WHERE bisbn = #{newbisbn} 
+		]]>
+	</select>
+	
+	<delete id="deleteByISBN" parameterType="String">
+		<![CDATA[
+		DELETE FROM BOOK WHERE bisbn = #{deleteISBN}
+		]]>
+	</delete>
+	
+	<update id="update" parameterType="Book">
+		<![CDATA[
+		UPDATE book SET btitle = #{btitle}, bauthor = #{bauthor}, bprice = #{bprice} WHERE bisbn = #{bisbn} 
+		]]>
+	</update>
+	
+	<insert id="insert" parameterType="HashMap">
+		<![CDATA[
+		INSERT INTO book (bisbn,btitle,bauthor,bprice) VALUES (#{bisbn},#{btitle},#{bauthor},#{bprice})
+		]]>
+	</insert>
+</mapper>
