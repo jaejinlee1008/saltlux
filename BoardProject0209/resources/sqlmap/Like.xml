@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+          PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" 
+          "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+          
+<mapper namespace="myLike">
+	
+	<insert id="insertLike"  parameterType="Like">		
+		<![CDATA[
+			INSERT INTO likes(boardNum,likeId) VALUES(#{boardNum},#{likeId})
+		]]>
+	</insert>
+	
+	<delete id="deleteLike"  parameterType="Like">		
+		<![CDATA[
+			DELETE FROM likes WHERE boardNum=#{boardNum} AND likeId=#{likeId}
+		]]>
+	</delete>
+	
+	<select id="getLike" parameterType="Like" resultType="Like">		
+		<![CDATA[
+			SELECT *
+			FROM likes
+			WHERE boardNum=#{boardNum} AND likeId=#{likeId}
+		]]>
+	</select>
+	
+</mapper>

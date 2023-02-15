@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+          PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" 
+          "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+          
+<mapper namespace="myComment">
+	
+	<insert id="insertComment"  parameterType="Comment">		
+		<![CDATA[
+			INSERT INTO comments(postNum,CWId,commentContent,CWName) VALUES(#{postNum},#{CWId},#{commentContent},#{CWName})
+		]]>
+	</insert>
+	
+	<update id="updateComment"  parameterType="Comment">		
+		<![CDATA[
+			UPDATE comments SET commentContent=#{commentContent}
+			WHERE commentNum=#{commentNum}
+		]]>
+	</update>
+	
+	<delete id="deleteComment"  parameterType="Comment">		
+		<![CDATA[
+			DELETE FROM comments WHERE commentNum=#{commentNum}
+		]]>
+	</delete>
+	
+	<select id="getComments" parameterType="Integer" resultType="Comment">		
+		<![CDATA[
+			SELECT *
+			FROM comments
+			WHERE postNum=#{num}
+		]]>
+	</select>
+	
+	<select id="getUpdated" parameterType="Comment" resultType="Comment">		
+		<![CDATA[
+			SELECT *
+			FROM comments
+			WHERE commentNum=#{commentNum}
+		]]>
+	</select>
+	
+	<select id="getLastOne" resultType="Comment">		
+		<![CDATA[
+			SELECT *
+			FROM comments
+			ORDER BY commentNum DESC LIMIT 1
+		]]>
+	</select>
+	
+
+</mapper>

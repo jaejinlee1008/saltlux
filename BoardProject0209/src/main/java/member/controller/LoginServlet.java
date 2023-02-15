@@ -1,6 +1,7 @@
 package member.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import board.service.BoardService;
+import board.vo.showBoard;
 import member.service.MemberService;
 import member.vo.Member;
 
@@ -32,8 +35,33 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		request.setCharacterEncoding("UTF-8");
+		HttpSession session = request.getSession(false);
+		if(session==null)
+		{
+			response.sendRedirect("loginFail.html");
+		}else
+		{
+			List<showBoard> list = null;
+			BoardService bservice = new BoardService();
+			list = bservice.getAllBoard();
+			
+			if(list!=null)
+			{
+				System.out.println("게시글 가져오기 성공");
+			}
+			// 3. 출력처리
+			if(list!=null)
+			{
+				// 로그인 성공
+				RequestDispatcher dispatcher = request.getRequestDispatcher("loginSuccess.jsp");
+				session.setAttribute("boardList", list);
+				dispatcher.forward(request, response);
+			}else {
+				System.out.println("게시글 가져오기 실패");
+			}
+		}
+		
 	}
 
 	/**
@@ -64,6 +92,19 @@ public class LoginServlet extends HttpServlet {
 		// 로그인 성공시 vo안의 회원 이름까지 포함해서 리턴
 		// 로그인 실패시 null 리턴
 		Member result = service.login(member);
+		List<showBoard> list = null;
+		if(result!=null)
+		{
+			BoardService bservice = new BoardService();
+			list = bservice.getAllBoard();
+			System.out.println("로그인 성공");
+		}else {
+			System.out.println("로그인 실패");
+		}
+		if(list!=null)
+		{
+			System.out.println("게시글 가져오기 성공");
+		}
 		
 		// 3. 출력처리
 		if(result!=null)
@@ -74,6 +115,7 @@ public class LoginServlet extends HttpServlet {
 			// 게시판 HTML 페이지를 클라이언트에게 전송(jsp)
 			// 하나의 servlet이 다른 servlet을 호출할때 디스패쳐 사용
 			RequestDispatcher dispatcher = request.getRequestDispatcher("loginSuccess.jsp");
+			session.setAttribute("boardList", list);
 			dispatcher.forward(request, response);
 		}else {
 			// 로그인 실패

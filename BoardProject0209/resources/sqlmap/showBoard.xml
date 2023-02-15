@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+          PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" 
+          "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+          
+<mapper namespace="myshowBoard">
+
+	<select id="allBoards"  resultType="showBoard">		
+		<![CDATA[
+			SELECT B.boardNum, B.boardTitle, M.memberName, B.boardDate, count(C.postNum) AS commentCount, B.boardLike
+			FROM members AS M
+			INNER JOIN boards AS B
+			ON M.memberId=B.boardAuthor
+			LEFT OUTER JOIN comments AS C
+			ON C.postNum = B.boardNum
+			GROUP BY B.boardNum
+			ORDER BY B.boardNum
+		]]>
+	</select>
+	
+	<select id="getName" parameterType="showBoard" resultType="showBoard">		
+		<![CDATA[
+			SELECT memberName
+			FROM members AS M
+			INNER JOIN boards AS B
+			ON M.memberId=B.boardAuthor
+			WHERE boardNum = #{boardNum}
+		]]>
+	</select>
+	
+
+</mapper>
