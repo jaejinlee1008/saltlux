@@ -13,5 +13,34 @@
 			WHERE memberId = #{memberId} AND memberPw = #{memberPw}
 		]]>
 	</select>
+	
+	<select id="checkId" parameterType="Member"
+	        resultType="Member">		
+		<![CDATA[
+			SELECT *
+			FROM  members
+			WHERE memberId = #{memberId}
+		]]>
+	</select>
+	
+	<insert id="insertMember" parameterType="Member">		
+		<![CDATA[
+			INSERT INTO members VALUES(#{memberId},#{memberName},#{memberPw})
+		]]>
+	</insert>
+	
+	<update id="updateMember" parameterType="Member">		
+		<![CDATA[
+			UPDATE members SET memberPw=#{memberPw}
+			WHERE memberId=#{memberId}
+		]]>
+	</update>
+	
+	<delete id="deleteMember" parameterType="Member">		
+		<![CDATA[
+			DELETE FROM members
+			WHERE memberId=#{memberId}
+		]]>
+	</delete>
 
 </mapper>

@@ -11,7 +11,7 @@
 	<!-- JSP에서는 나에게 할당된 session객체를 그냥 사용 가능 => session -->
 	<% Member member = (Member)session.getAttribute("member"); %>
 	<h1><%= member.getMemberName() %>님 환영합니다.</h1>
-	<div><a href="logout">로그아웃</a></div>
+	<div align="right" style="width:550px"><a href="editmember.jsp">회원정보수정</a>&nbsp&nbsp<a href="logout">로그아웃</a></div>
 	<h3>게시글 목록
 		<div align="right" style="width:550px">
 			<form action="newPost.jsp" method="post">
