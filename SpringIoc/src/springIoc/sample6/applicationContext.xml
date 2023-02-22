@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="consoleRef" class="springIoc.sample6.ConsoleOutput"/>
+	
+	<!-- <bean id="fileRef" class="springIoc.sample6.FileOutput">
+		<constructor-arg value="c:/temp/test.txt"></constructor-arg>
+		<property name="filePath">
+			<value>c:/temp/test.txt</value>
+		</property>
+	</bean> -->
+	
+	<bean id="fileRef" class="springIoc.sample6.FileOutput"
+		c:filePath="c:/temp/test.txt" />
+		
+	<bean id="myBean" class="springIoc.sample6.MessageBeanImpl"
+		c:name="홍길동" p:phone="010-1234-5678" p:output-ref="fileRef" />
+	
+	<bean id="myBeanConsole" class="springIoc.sample6.MessageBeanImpl"
+		c:name="신사임당" p:phone="010-4312-1232" p:output-ref="consoleRef" />
+
+</beans>

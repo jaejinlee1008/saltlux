@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="myObj" class="springIoc.sample8.TestBean" autowire="byName" />
+
+	<bean id="data1" class="springIoc.sample8.DataBean"/>
+	
+	<bean id="data2" class="springIoc.sample8.DataBean"/>
+	
+	
+</beans>

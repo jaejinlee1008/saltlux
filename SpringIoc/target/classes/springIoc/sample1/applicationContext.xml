@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="messageBean" class="springioc.sample1.MessageBeanImpl"
+		scope="singleton">
+		<constructor-arg>
+			<value>딸기</value>
+		</constructor-arg>
+		<property name="cost">
+			<value>3000</value>
+		</property>
+	</bean>
+	
+	<bean id="messageBean_1" class="springioc.sample1.MessageBeanImpl">
+	</bean>
+
+	<bean id="messageBean_2" class="springioc.sample1.MessageBeanImpl">
+		<property name="cost">
+			<value>4000</value>
+		</property>
+	</bean>
+
+	<bean id="messageBean_3" class="springioc.sample1.MessageBeanImpl">		
+		<constructor-arg index="1" type="int" value="7000" />
+		<constructor-arg index="0" type="java.lang.String" value="바나나" />		
+	</bean>
+
+</beans>
