@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>연산할 두 개의 숫자를 입력하고 연산자를 선택</h1>
+	<br><br>
+	<form action="/springweb/calc.do" method="POST">
+		<input type="number" name="firstNum" required="required"> <!-- required는 값을 강제시킴, 값이 없으면 안됨 -->
+		<select name="operator">
+			<option value="plus"> + </option>
+			<option value="minus"> - </option>
+			<option value="mul"> * </option>
+			<option value="div"> / </option>
+		</select>
+		<input type="number" name="secondNum" required="required">
+		<br><br>
+		<input type="submit" value="계산하기">
+	</form>
+</body>
+</html>
