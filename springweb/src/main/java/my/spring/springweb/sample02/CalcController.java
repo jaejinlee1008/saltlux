@@ -1,7 +1,5 @@
 package my.spring.springweb.sample02;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/calc.do")
 public class CalcController {
-	private static final Logger logger = LoggerFactory.getLogger(CalcController.class);
+//	private static final Logger logger = LoggerFactory.getLogger(CalcController.class);
 	
 	@PostMapping
 	public ModelAndView process(@RequestParam("firstNum") int num1,

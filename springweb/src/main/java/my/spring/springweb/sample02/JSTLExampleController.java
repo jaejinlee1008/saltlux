@@ -1,0 +1,25 @@
+package my.spring.springweb.sample02;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class JSTLExampleController {
+	@RequestMapping(value="/jstlExample")
+	public String myMethod(Model model) {
+		
+		List<String> list = new ArrayList<String>();
+		list.add("홍길동");
+		list.add("신사임당");
+		list.add("강감찬");
+		
+		model.addAttribute("myNum",100);
+		model.addAttribute("myList",list);
+		
+		return "sample02/jstlExample";
+	}
+}
