@@ -35,7 +35,9 @@
 			<AppenderRef ref="stdout_1" />
 			<AppenderRef ref="File_1" />
 		</Logger>
-
+		
+		<!-- name에 mapper의 namespace값을 입력하면 입력된 namespace의 query가 실행될 때 로그가 찍힌다. -->
+		<Logger name="myBook" level="trace"></Logger>
 
 		<Root level="INFO">
 			<AppenderRef ref="stdout_2" />
